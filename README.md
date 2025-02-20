@@ -12,4 +12,4 @@ This function can be run with e.g. DebugPlus.
 - `no_cost` (default: `false`): Don't include a column for cost.
 - `no_desc` (default: `false`): Don't include a column for the description.
 - `obj` (default: none): An object to search instead of `G.P_CENTER_POOLS[set]`.
-- `key_flag` (default: false): Search the object using `pairs` instead of `ipairs`.
+- `key_flag` (default: `false`): Search the object using `pairs` instead of `ipairs`.
