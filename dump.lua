@@ -448,13 +448,11 @@
                 dump_objects_to_file("Planet")
                 dump_objects_to_file("Spectral")
                 dump_objects_to_file("Enhanced", nil, nil, true)
-                dump_objects_to_file("Seal", nil, nil, true, true)
+                dump_objects_to_file("Seal", nil, nil, true, nil, nil, nil, nil, function(s)
+                    return G.localization.descriptions.Other[s.key].text
+                end)
                 dump_objects_to_file("Booster", nil, nil, nil, true, nil, nil, nil, function(b)
-                    return localize {
-                        type = 'name_text',
-                        set = 'Other',
-                        key = b.key
-                    }
+                    return G.localization.descriptions.Other[b.key].text
                 end)
                 dump_objects_to_file("Tag", nil, nil, true)
                 dump_objects_to_file("Blind", function(b)
