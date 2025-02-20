@@ -24,6 +24,14 @@
                             info.type)
                 end
 
+                local function log(msg, logger)
+                    if sendInfoMessage then
+                        sendInfoMessage(msg, logger)
+                    else
+                        print(msg)
+                    end
+                end
+
                 local vanilla_keys = {
                     j_joker = true,
                     j_greedy_joker = true,
@@ -423,7 +431,7 @@
                         if not success then
                             error("Dumping set " .. set .. " failed with inner message:\n" .. message)
                         end
-                        sendInfoMessage("Set " .. set .. ' dumped', "dumper")
+                        log("Set " .. set .. ' dumped', "dumper")
                     end)
                 end
                 dump_objects_to_file("Joker", function(j)
@@ -449,7 +457,7 @@
                 end, "Color", true, nil, G.P_BLINDS, true)
                 dump_objects_to_file("Stake", nil, nil, true)
 
-                sendInfoMessage("Objects dumped to " .. love.filesystem.getSaveDirectory() .. sep .. 'jokerDump',
+                log("Objects dumped to " .. love.filesystem.getSaveDirectory() .. sep .. 'jokerDump',
                     "dumper")
                 return true
             end
