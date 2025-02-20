@@ -385,7 +385,7 @@
                     bl_club = true,
                     bl_mark = true
                 }
-                function dump_objects_to_file(set, extra, extra_header, no_cost, no_desc, obj, key_flag)
+                function dump_objects_to_file(set, extra, extra_header, no_cost, no_desc, obj, key_flag, f_name, f_desc)
                     pcall(function()
                         local output = "ID\tName"
                         if not no_desc then
@@ -403,18 +403,23 @@
                         for k, v in f(obj) do
                             local key = key_flag and k or v.key
                             if not vanilla_keys[key] then
-                                output = output .. key .. '\t' .. localize {
+                                output = output .. key .. '\t' .. (f_name and f_name(v) or localize {
                                     type = 'name_text',
                                     set = set,
                                     key = key
-                                } .. "\t"
+                                })
                                 if not no_desc then
-                                    local desc = G.localization.descriptions[set][key].text
-                                    if #desc >= 1 then
-                                        output = output .. desc[1]
-                                        for i = 2, #desc do
-                                            output = output .. '\\n' .. desc[i]
+                                    output = output .. "\t"
+                                    local desc = f_desc and f_desc(v) or G.localization.descriptions[set][key].text
+                                    if type(desc) == "table" then
+                                        if #desc >= 1 then
+                                            output = output .. desc[1]
+                                            for i = 2, #desc do
+                                                output = output .. '\\n' .. desc[i]
+                                            end
                                         end
+                                    else
+                                        output = output .. desc
                                     end
                                 end
                                 if extra then
@@ -444,7 +449,13 @@
                 dump_objects_to_file("Spectral")
                 dump_objects_to_file("Enhanced", nil, nil, true)
                 dump_objects_to_file("Seal", nil, nil, true, true)
-                dump_objects_to_file("Booster", nil, nil, nil, true, nil)
+                dump_objects_to_file("Booster", nil, nil, nil, true, nil, nil, nil, function(b)
+                    return localize {
+                        type = 'name_text',
+                        set = 'Other',
+                        key = b.key
+                    }
+                end)
                 dump_objects_to_file("Tag", nil, nil, true)
                 dump_objects_to_file("Blind", function(b)
                     if b.boss_colour then
@@ -457,8 +468,7 @@
                 end, "Color", true, nil, G.P_BLINDS, true)
                 dump_objects_to_file("Stake", nil, nil, true)
 
-                log("Objects dumped to " .. love.filesystem.getSaveDirectory() .. sep .. 'jokerDump',
-                    "dumper")
+                log("Objects dumped to " .. love.filesystem.getSaveDirectory() .. sep .. 'jokerDump', "dumper")
                 return true
             end
         })
