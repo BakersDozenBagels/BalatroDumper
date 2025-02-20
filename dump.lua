@@ -393,7 +393,18 @@
                 }
                 function dump_objects_to_file(set, extra, extra_header, no_cost, no_desc, obj, key_flag, f_name, f_desc)
                     local status, error = pcall(function()
+                        local success, message = love.filesystem.write('jokerDump' .. sep .. set .. '.csv', '')
+                        if not success then
+                            error("Dumping set " .. set .. " failed with inner message:\n" .. message)
+                        end
                         local output = "ID\tName"
+                        local function append()
+                            local success, message = love.filesystem.append('jokerDump' .. sep .. set .. '.csv', output)
+                            if not success then
+                                error("Dumping set " .. set .. " failed with inner message:\n" .. message)
+                            end
+                            output = ''
+                        end
                         if not no_desc then
                             output = output .. '\tDescription'
                         end
@@ -404,6 +415,7 @@
                             output = output .. '\tCost'
                         end
                         output = output .. '\n'
+                        append()
                         obj = obj or G.P_CENTER_POOLS[set]
                         local f = key_flag and pairs or ipairs
                         for k, v in f(obj) do
@@ -437,13 +449,11 @@
                                     output = output .. '\t' .. v.cost
                                 end
                                 output = output .. '\n'
+                                append()
                             end
                         end
 
-                        local success, message = love.filesystem.write('jokerDump' .. sep .. set .. '.csv', output)
-                        if not success then
-                            error("Dumping set " .. set .. " failed with inner message:\n" .. message)
-                        end
+                        append()
                         log("Set " .. set .. ' dumped', "dumper")
                     end)
                     if not status then
@@ -512,7 +522,7 @@
                     spell = true,
                     Potion = true,
                     Exotic = true,
-                    Default = true, -- only c_base (the null edition)
+                    Default = true -- only c_base (the null edition)
                     -- Consumeables = true -- highly redundant
                 }
 
