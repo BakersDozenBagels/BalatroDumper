@@ -389,7 +389,7 @@
                     Red = true,
                     Blue = true,
                     Gold = true,
-                    Purple = true,
+                    Purple = true
                 }
                 function dump_objects_to_file(set, extra, extra_header, no_cost, no_desc, obj, key_flag, f_name, f_desc)
                     local status, error = pcall(function()
@@ -416,7 +416,9 @@
                                 })
                                 if not no_desc then
                                     output = output .. "\t"
-                                    local desc = f_desc and f_desc(v) or G.localization.descriptions[set][key].text
+                                    local desc = f_desc and f_desc(v) or G.localization.descriptions[set] and
+                                                     G.localization.descriptions[set][key] and
+                                                     G.localization.descriptions[set][key].text or "ERROR"
                                     if type(desc) == "table" then
                                         if #desc >= 1 then
                                             output = output .. desc[1]
@@ -464,10 +466,12 @@
                     local entry = G.localization.descriptions.Other[s.key]
                     return entry and entry.text or 'ERROR'
                 end)
-                dump_objects_to_file("Booster", nil, nil, nil, nil, nil, nil, function(b)
-                    return G.localization.descriptions.Other[b.key].name
-                end, function(b)
-                    return G.localization.descriptions.Other[b.key].text
+                dump_objects_to_file("Booster", nil, nil, nil, nil, nil, nil, function(s)
+                    local entry = G.localization.descriptions.Other[s.key]
+                    return entry and entry.name or 'ERROR'
+                end, function(s)
+                    local entry = G.localization.descriptions.Other[s.key]
+                    return entry and entry.text or 'ERROR'
                 end)
                 dump_objects_to_file("Tag", nil, nil, true)
                 dump_objects_to_file("Blind", function(b)
@@ -480,6 +484,7 @@
                     return "ERROR"
                 end, "Color", true, nil, G.P_BLINDS, true)
                 dump_objects_to_file("Stake", nil, nil, true)
+                dump_objects_to_file("Sleeve", nil, nil, true)
 
                 log("Objects dumped to " .. love.filesystem.getSaveDirectory() .. sep .. 'jokerDump', "dumper")
                 return true
