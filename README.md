@@ -1,6 +1,6 @@
 # Balatro Item Dumper
 
-A utility to dump all modded additions to Balatro. Automatically dumps Jokers, Vouchers, Decks, Planets, Spectrals, Enhancements, Seals, Boosters, Tags, Blinds, and Stakes. Additionally, defines `dump_objects_to_file(set, extra, extra_header, no_cost, no_desc, obj, key_flag, f_name, f_desc)` which can dump other objects.
+A utility to dump all modded additions to Balatro. Automatically dumps Jokers, Vouchers, Decks, Planets, Spectrals, Editions, Enhancements, Seals, Boosters, Tags, Blinds, and Stakes, as well as any modded pools. Additionally, defines `dump_objects_to_file(set, extra, extra_header, no_cost, no_desc, obj, key_flag, f_name, f_desc)` which can dump other objects.
 
 ## dump_objects_to_file
 
