@@ -445,7 +445,7 @@
                         log("Set " .. set .. ' dumped', "dumper")
                     end)
                     if not status then
-                        log(error, "dumper")
+                        log("Error when dumping set " .. set .. ':\n' .. error, "dumper")
                     end
                 end
                 dump_objects_to_file("Joker", function(j)
