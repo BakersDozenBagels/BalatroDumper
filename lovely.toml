@@ -1,0 +1,10 @@
+[manifest]
+version = "1.0.0"
+priority = 999999
+dump_lua = true
+
+[[patches]]
+[patches.copy]
+target = "game.lua"
+position = "append"
+sources = ["dump.lua"]
