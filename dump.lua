@@ -451,7 +451,7 @@
                 dump_objects_to_file("Seal", nil, nil, true, nil, nil, nil, nil, function(s)
                     return G.localization.descriptions.Other[s.key].text
                 end)
-                dump_objects_to_file("Booster", nil, nil, nil, true, nil, nil, nil, function(b)
+                dump_objects_to_file("Booster", nil, nil, nil, nil, nil, nil, nil, function(b)
                     return G.localization.descriptions.Other[b.key].text
                 end)
                 dump_objects_to_file("Tag", nil, nil, true)
