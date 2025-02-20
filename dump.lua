@@ -392,7 +392,7 @@
                     Purple = true,
                 }
                 function dump_objects_to_file(set, extra, extra_header, no_cost, no_desc, obj, key_flag, f_name, f_desc)
-                    pcall(function()
+                    local status, error = pcall(function()
                         local output = "ID\tName"
                         if not no_desc then
                             output = output .. '\tDescription'
@@ -408,7 +408,7 @@
                         local f = key_flag and pairs or ipairs
                         for k, v in f(obj) do
                             local key = key_flag and k or v.key
-                            if not vanilla_keys[key] or set == 'Seal' and vanilla_seals[key] then
+                            if not vanilla_keys[key] and (set ~= 'Seal' or not vanilla_seals[key]) then
                                 output = output .. key .. '\t' .. (f_name and f_name(v) or localize {
                                     type = 'name_text',
                                     set = set,
@@ -444,6 +444,9 @@
                         end
                         log("Set " .. set .. ' dumped', "dumper")
                     end)
+                    if not status then
+                        log(error, "dumper")
+                    end
                 end
                 dump_objects_to_file("Joker", function(j)
                     return j.rarity
@@ -454,10 +457,12 @@
                 dump_objects_to_file("Planet")
                 dump_objects_to_file("Spectral")
                 dump_objects_to_file("Enhanced", nil, nil, true)
-                dump_objects_to_file("Seal", nil, nil, true, nil, nil, nil, function(s)
-                    return G.localization.descriptions.Other[s.key].name
+                dump_objects_to_file("Seal", nil, nil, true, nil, G.P_SEALS, true, function(s)
+                    local entry = G.localization.descriptions.Other[s.key]
+                    return entry and entry.name or 'ERROR'
                 end, function(s)
-                    return G.localization.descriptions.Other[s.key].text
+                    local entry = G.localization.descriptions.Other[s.key]
+                    return entry and entry.text or 'ERROR'
                 end)
                 dump_objects_to_file("Booster", nil, nil, nil, nil, nil, nil, function(b)
                     return G.localization.descriptions.Other[b.key].name
