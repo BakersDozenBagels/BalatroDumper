@@ -385,6 +385,12 @@
                     bl_club = true,
                     bl_mark = true
                 }
+                local vanilla_seals = {
+                    Red = true,
+                    Blue = true,
+                    Gold = true,
+                    Purple = true,
+                }
                 function dump_objects_to_file(set, extra, extra_header, no_cost, no_desc, obj, key_flag, f_name, f_desc)
                     pcall(function()
                         local output = "ID\tName"
@@ -402,7 +408,7 @@
                         local f = key_flag and pairs or ipairs
                         for k, v in f(obj) do
                             local key = key_flag and k or v.key
-                            if not vanilla_keys[key] then
+                            if not vanilla_keys[key] or set == 'Seal' and vanilla_seals[key] then
                                 output = output .. key .. '\t' .. (f_name and f_name(v) or localize {
                                     type = 'name_text',
                                     set = set,
