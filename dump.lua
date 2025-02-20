@@ -486,6 +486,49 @@
                 dump_objects_to_file("Stake", nil, nil, true)
                 dump_objects_to_file("Sleeve", nil, nil, true)
 
+                dump_objects_to_file("gear")
+                dump_objects_to_file("Loteria")
+                dump_objects_to_file("Zodiac")
+                dump_objects_to_file("Action")
+                dump_objects_to_file("Bonus")
+                dump_objects_to_file("Ability")
+                dump_objects_to_file("Spell")
+                dump_objects_to_file("spell_yugioh", nil, nil, nil, nil, G.P_CENTER_POOLS.spell)
+                dump_objects_to_file("spell_rare")
+                dump_objects_to_file("trap")
+                dump_objects_to_file("Polymino")
+                dump_objects_to_file("Area")
+                dump_objects_to_file("Lunar")
+                dump_objects_to_file("Stellar")
+                dump_objects_to_file("Elemental")
+                dump_objects_to_file("Attack")
+                dump_objects_to_file("Loot")
+                dump_objects_to_file("EGO_Gift")
+                dump_objects_to_file("Energy")
+                dump_objects_to_file("Item")
+                dump_objects_to_file("Alchemical")
+                dump_objects_to_file("Cine")
+                dump_objects_to_file("GuestAppearance")
+                dump_objects_to_file("sigil")
+                dump_objects_to_file("Magic")
+                dump_objects_to_file("Land")
+                dump_objects_to_file("Card_token")
+                dump_objects_to_file("Potion", nil, nil, nil, nil, nil, nil, nil, function(p)
+                    for k, v in pairs(p.config) do
+                        if string.find(k, "^potion%d$") and v then
+                            return localize('k_' .. k)
+                        end
+                    end
+                    return 'ERROR'
+                end)
+                dump_objects_to_file("Mathematic")
+                dump_objects_to_file("scrap")
+                dump_objects_to_file("Contract")
+                dump_objects_to_file("Auxiliary")
+                dump_objects_to_file("Packet")
+                dump_objects_to_file("Parcel")
+                dump_objects_to_file("index")
+
                 log("Objects dumped to " .. love.filesystem.getSaveDirectory() .. sep .. 'jokerDump', "dumper")
                 return true
             end
