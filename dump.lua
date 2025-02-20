@@ -411,14 +411,14 @@
                             if not vanilla_keys[key] and (set ~= 'Seal' or not vanilla_seals[key]) then
                                 output = output .. key .. '\t' .. (f_name and f_name(v) or localize {
                                     type = 'name_text',
-                                    set = set,
+                                    set = v.set or set,
                                     key = key
-                                })
+                                } or 'ERROR')
                                 if not no_desc then
                                     output = output .. "\t"
-                                    local desc = f_desc and f_desc(v) or G.localization.descriptions[set] and
-                                                     G.localization.descriptions[set][key] and
-                                                     G.localization.descriptions[set][key].text or "ERROR"
+                                    local desc = f_desc and f_desc(v) or G.localization.descriptions[v.set or set] and
+                                                     G.localization.descriptions[v.set or set][key] and
+                                                     G.localization.descriptions[v.set or set][key].text or "ERROR"
                                     if type(desc) == "table" then
                                         if #desc >= 1 then
                                             output = output .. desc[1]
@@ -453,12 +453,9 @@
                 dump_objects_to_file("Joker", function(j)
                     return j.rarity
                 end, "Rarity")
-                dump_objects_to_file("Tarot")
-                dump_objects_to_file("Voucher")
                 dump_objects_to_file("Back", nil, nil, true)
-                dump_objects_to_file("Planet")
-                dump_objects_to_file("Spectral")
                 dump_objects_to_file("Enhanced", nil, nil, true)
+                dump_objects_to_file("Edition", nil, nil, true)
                 dump_objects_to_file("Seal", nil, nil, true, nil, G.P_SEALS, true, function(s)
                     local entry = G.localization.descriptions.Other[s.key]
                     return entry and entry.name or 'ERROR'
@@ -485,34 +482,7 @@
                 end, "Color", true, nil, G.P_BLINDS, true)
                 dump_objects_to_file("Stake", nil, nil, true)
                 dump_objects_to_file("Sleeve", nil, nil, true)
-
-                dump_objects_to_file("gear")
-                dump_objects_to_file("Loteria")
-                dump_objects_to_file("Zodiac")
-                dump_objects_to_file("Action")
-                dump_objects_to_file("Bonus")
-                dump_objects_to_file("Ability")
-                dump_objects_to_file("Spell")
                 dump_objects_to_file("spell_yugioh", nil, nil, nil, nil, G.P_CENTER_POOLS.spell)
-                dump_objects_to_file("spell_rare")
-                dump_objects_to_file("trap")
-                dump_objects_to_file("Polymino")
-                dump_objects_to_file("Area")
-                dump_objects_to_file("Lunar")
-                dump_objects_to_file("Stellar")
-                dump_objects_to_file("Elemental")
-                dump_objects_to_file("Attack")
-                dump_objects_to_file("Loot")
-                dump_objects_to_file("EGO_Gift")
-                dump_objects_to_file("Energy")
-                dump_objects_to_file("Item")
-                dump_objects_to_file("Alchemical")
-                dump_objects_to_file("Cine")
-                dump_objects_to_file("GuestAppearance")
-                dump_objects_to_file("sigil")
-                dump_objects_to_file("Magic")
-                dump_objects_to_file("Land")
-                dump_objects_to_file("Card_token")
                 dump_objects_to_file("Potion", nil, nil, nil, nil, nil, nil, nil, function(p)
                     for k, v in pairs(p.config) do
                         if string.find(k, "^potion%d$") and v then
@@ -521,13 +491,36 @@
                     end
                     return 'ERROR'
                 end)
-                dump_objects_to_file("Mathematic")
-                dump_objects_to_file("scrap")
-                dump_objects_to_file("Contract")
-                dump_objects_to_file("Auxiliary")
-                dump_objects_to_file("Packet")
-                dump_objects_to_file("Parcel")
-                dump_objects_to_file("index")
+
+                dump_objects_to_file('Exotic', nil, nil, nil, nil, nil, nil, function(c)
+                    return
+                        G.localization.descriptions.Other[c.key] and G.localization.descriptions.Other[c.key].text and
+                            G.localization.descriptions.Other[c.key].text[1] or "ERROR"
+                end)
+
+                local no_default = {
+                    Joker = true,
+                    Back = true,
+                    Enhanced = true,
+                    Edition = true,
+                    Seal = true,
+                    Booster = true,
+                    Tag = true,
+                    Blind = true,
+                    Stake = true,
+                    Sleeve = true,
+                    spell = true,
+                    Potion = true,
+                    Exotic = true,
+                    Default = true, -- only c_base (the null edition)
+                    -- Consumeables = true -- highly redundant
+                }
+
+                for k in pairs(G.P_CENTER_POOLS) do
+                    if not no_default[k] then
+                        dump_objects_to_file(k)
+                    end
+                end
 
                 log("Objects dumped to " .. love.filesystem.getSaveDirectory() .. sep .. 'jokerDump', "dumper")
                 return true
